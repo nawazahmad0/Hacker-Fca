@@ -1,20 +1,23 @@
 name: "publish npm"
 
-on: push
+# 👇 Automatic publish हटाकर manual trigger किया है
+on:
+  workflow_dispatch:  # 🔥 अब यह सिर्फ manually चलेगा, push पर नहीं
 
 jobs:
-    publish:
-        runs-on: ubuntu-latest
-        steps:
-            - name: checkout
-              uses: actions/checkout@v2
-            - name: node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
-                  registry-url: https://registry.npmjs.org
-            - name: publish
-              run: npm publish --access public
-#               working-directory: package.json
-              env:
-                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
